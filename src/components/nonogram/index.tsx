@@ -1,61 +1,51 @@
 import { useRef, useState } from "react";
 
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import clsx from "clsx";
-
+import Cell from "./cell";
 import ColumnClues from "./col-clues";
 import RowClues from "./row-clues";
-
-export interface NonogramDefinition {
-    name: string;
-    width: number;
-    height: number;
-    rowClues: number[][];
-    colClues: number[][];
-    solution: boolean[];
-}
+import {
+    FillState,
+    MouseButton,
+    NonogramDefinition,
+    indexToRowCol
+} from "./utils";
 
 interface Props {
     definition: NonogramDefinition;
-}
-
-enum CellState {
-    Empty = 0,
-    Filled = 1,
-    Crossed = 2
 }
 
 const Nonogram = (props: Props) => {
     const { definition } = props;
     const { width, height, rowClues, colClues, solution } = definition;
 
-    const [grid, setGrid] = useState<CellState[]>(
-        Array.from({ length: width * height }).map(() => CellState.Empty)
+    const [grid, setGrid] = useState<FillState[]>(
+        Array.from({ length: width * height }).map(() => FillState.Empty)
     );
 
     const [pathStart, setPathStart] = useState<number | undefined>(undefined);
     const [currentPath, setCurrentPath] = useState<number[]>([]);
 
     const [solved, setSolved] = useState(false);
-    const currentFill = useRef<CellState>(CellState.Filled);
+    const currentFill = useRef<FillState>(FillState.Filled);
 
-    const toggleCellFill = (index: number) => {
+    const toggleCellFill = (index: number, mouseButton: MouseButton) => {
         const newGrid = [...grid];
-        const newFill =
-            grid[index] === CellState.Empty || grid[index] === CellState.Crossed
-                ? CellState.Filled
-                : CellState.Empty;
-        newGrid[index] = newFill;
-        currentFill.current = newFill;
-        setGrid(newGrid);
-    };
+        let newFill: FillState;
 
-    const toggleCellCrossed = (index: number) => {
-        const newGrid = [...grid];
-        const newFill =
-            grid[index] === CellState.Empty || grid[index] === CellState.Filled
-                ? CellState.Crossed
-                : CellState.Empty;
+        if (mouseButton === "left") {
+            newFill =
+                grid[index] === FillState.Empty ||
+                grid[index] === FillState.Crossed
+                    ? FillState.Filled
+                    : FillState.Empty;
+        } else {
+            newFill =
+                grid[index] === FillState.Empty ||
+                grid[index] === FillState.Filled
+                    ? FillState.Crossed
+                    : FillState.Empty;
+        }
+
         newGrid[index] = newFill;
         currentFill.current = newFill;
         setGrid(newGrid);
@@ -66,9 +56,9 @@ const Nonogram = (props: Props) => {
 
         for (let i = 0; i < grid.length; i++) {
             if (
-                (grid[i] === CellState.Filled && !solution[i]) ||
-                ((grid[i] === CellState.Empty ||
-                    grid[i] === CellState.Crossed) &&
+                (grid[i] === FillState.Filled && !solution[i]) ||
+                ((grid[i] === FillState.Empty ||
+                    grid[i] === FillState.Crossed) &&
                     solution[i])
             ) {
                 errors = true;
@@ -81,12 +71,8 @@ const Nonogram = (props: Props) => {
 
     const calculatePath = (index: number) => {
         if (pathStart === undefined) return;
-
-        const startRow = Math.floor(pathStart / width);
-        const startCol = pathStart % width;
-
-        const endRow = Math.floor(index / width);
-        const endCol = index % width;
+        const [startRow, startCol] = indexToRowCol(pathStart, width);
+        const [endRow, endCol] = indexToRowCol(index, width);
 
         const rowDiff = endRow - startRow;
         const colDiff = endCol - startCol;
@@ -125,26 +111,12 @@ const Nonogram = (props: Props) => {
         checkSolution();
     };
 
-    const getCellColor = (index: number) => {
+    const getCellFill = (index: number) => {
         if (currentPath.includes(index)) {
-            return currentFill.current === CellState.Empty ||
-                currentFill.current === CellState.Crossed
-                ? "bg-white"
-                : "bg-slate-400";
+            return currentFill.current;
         }
 
-        return grid[index] === CellState.Empty ||
-            grid[index] === CellState.Crossed
-            ? "bg-white"
-            : "bg-slate-400";
-    };
-
-    const shouldRenderCross = (index: number) => {
-        if (currentPath.includes(index)) {
-            return currentFill.current === CellState.Crossed ? true : false;
-        }
-
-        return grid[index] === CellState.Crossed;
+        return grid[index] || FillState.Empty;
     };
 
     const renderGrid = () => {
@@ -157,33 +129,17 @@ const Nonogram = (props: Props) => {
                 }}
             >
                 {Array.from({ length: width * height }).map((_, index) => {
-                    const row = Math.floor(index / width);
-                    const col = index % width;
-
                     return (
-                        <div
+                        <Cell
                             key={index}
-                            className={clsx(
-                                `border border-slate-100 ${getCellColor(
-                                    index
-                                )}`,
-                                {
-                                    "border-r-slate-300":
-                                        col % 5 === 4 && col < width - 1,
-                                    "border-l-slate-300":
-                                        col % 5 === 0 && col > 0,
-                                    "border-b-slate-300":
-                                        row % 5 === 4 && row < height - 1,
-                                    "border-t-slate-300":
-                                        row % 5 === 0 && row > 0
-                                }
-                            )}
+                            index={index}
+                            gridWidth={width}
+                            fillState={getCellFill(index)}
                             onMouseDown={(e) => {
-                                if (e.button === 0) {
-                                    toggleCellFill(index);
-                                } else if (e.button === 2) {
-                                    toggleCellCrossed(index);
-                                }
+                                toggleCellFill(
+                                    index,
+                                    e.button === 0 ? "left" : "right"
+                                );
                                 setPathStart(index);
                             }}
                             onMouseUp={() => {
@@ -195,14 +151,7 @@ const Nonogram = (props: Props) => {
                                     calculatePath(index);
                                 }
                             }}
-                            onContextMenu={(e) => {
-                                e.preventDefault();
-                            }}
-                        >
-                            {shouldRenderCross(index) && (
-                                <XMarkIcon className="text-slate-300" />
-                            )}
-                        </div>
+                        />
                     );
                 })}
             </div>
