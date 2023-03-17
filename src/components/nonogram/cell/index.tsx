@@ -1,9 +1,9 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 
-import { FillState, indexToRowCol } from "./utils";
+import { FillState, indexToRowCol } from "../utils";
 
-interface Props {
+export interface Props {
     index: number;
     fillState: FillState;
     gridWidth: number;
@@ -25,6 +25,7 @@ const Cell = (props: Props) => {
     const [row, col] = indexToRowCol(props.index, gridWidth);
     return (
         <div
+            test-id="cell"
             key={index}
             className={clsx(`border border-slate-100`, {
                 "bg-slate-400": fillState === FillState.Filled,
