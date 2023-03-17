@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { useRef, useState } from "react";
 
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
+
+import ColumnClues from "./col-clues";
+import RowClues from "./row-clues";
 
 export interface NonogramDefinition {
     name: string;
@@ -29,77 +32,36 @@ const Nonogram = (props: Props) => {
         Array.from({ length: width * height }).map(() => CellState.Empty)
     );
 
-    const renderColClues = () => {
-        return (
-            <div
-                className="grid"
-                style={{
-                    gridTemplateColumns: `repeat(${colClues.length}, 28px)`
-                }}
-            >
-                {definition.colClues.map((clue, index) => {
-                    return (
-                        <div key={index} className="flex flex-col justify-end items-center">
-                            {clue.map((clue, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className="text-center h-7 text-slate-500 text-sm"
-                                    >
-                                        {clue}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
-
-    const renderRowClues = () => {
-        return (
-            <div
-                className="grid"
-                style={{ gridTemplateRows: `repeat(${rowClues.length}, 28px)` }}
-            >
-                {definition.rowClues.map((clue, index) => {
-                    return (
-                        <div key={index} className="flex flex-row justify-end items-center">
-                            {clue.map((clue, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className="text-center w-7 text-slate-500 text-sm"
-                                    >
-                                        {clue}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
+    const [mouseDown, setMouseDown] = useState(false);
+    const currentFill = useRef<CellState>(CellState.Filled);
 
     const toggleCellFill = (index: number) => {
         const newGrid = [...grid];
-        newGrid[index] =
+        const newFill =
             grid[index] === CellState.Empty || grid[index] === CellState.Crossed
                 ? CellState.Filled
                 : CellState.Empty;
+        newGrid[index] = newFill;
+        currentFill.current = newFill;
         setGrid(newGrid);
     };
 
     const toggleCellCrossed = (index: number) => {
         const newGrid = [...grid];
-        newGrid[index] =
+        const newFill =
             grid[index] === CellState.Empty || grid[index] === CellState.Filled
                 ? CellState.Crossed
                 : CellState.Empty;
+        newGrid[index] = newFill;
+        currentFill.current = newFill;
         setGrid(newGrid);
-    }
+    };
+
+    const fillCell = (index: number, fill: CellState) => {
+        const newGrid = [...grid];
+        newGrid[index] = fill;
+        setGrid(newGrid);
+    };
 
     const renderGrid = () => {
         return (
@@ -114,16 +76,34 @@ const Nonogram = (props: Props) => {
                     return (
                         <div
                             key={index}
-                            className={clsx("border border-slate-100 transition-colors", {
-                                "bg-slate-400": grid[index] === CellState.Filled,
-                            })}
-                            onClick={() => toggleCellFill(index)}
+                            className={clsx(
+                                "border border-slate-100 transition-colors",
+                                {
+                                    "bg-slate-400":
+                                        grid[index] === CellState.Filled
+                                }
+                            )}
+                            onMouseDown={(e) => {
+                                if (e.button === 0) {
+                                    toggleCellFill(index);
+                                } else if (e.button === 2) {
+                                    toggleCellCrossed(index);
+                                }
+                                setMouseDown(true);
+                            }}
+                            onMouseUp={() => setMouseDown(false)}
+                            onMouseEnter={() => {
+                                if (mouseDown) {
+                                    fillCell(index, currentFill.current);
+                                }
+                            }}
                             onContextMenu={(e) => {
                                 e.preventDefault();
-                                toggleCellCrossed(index);
                             }}
                         >
-                            {grid[index] === CellState.Crossed && <XMarkIcon className="text-slate-300" /> }
+                            {grid[index] === CellState.Crossed && (
+                                <XMarkIcon className="text-slate-300" />
+                            )}
                         </div>
                     );
                 })}
@@ -134,8 +114,8 @@ const Nonogram = (props: Props) => {
     return (
         <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
             <div></div>
-            <div>{renderColClues()}</div>
-            <div>{renderRowClues()}</div>
+            <ColumnClues clues={colClues} />
+            <RowClues clues={rowClues} />
             <div>{renderGrid()}</div>
         </div>
     );
