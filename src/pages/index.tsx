@@ -4,6 +4,7 @@ import Head from "next/head";
 import Nonogram, { NonogramDefinition } from "~/components/nonogram";
 
 const Home: NextPage = () => {
+    // prettier-ignore
     const nonogramDefinition: NonogramDefinition = {
         name: "test",
         width: 10,
@@ -20,6 +21,18 @@ const Home: NextPage = () => {
             [1, 1, 1, 1],
             [3, 1],
             [1]
+        ],
+        solution: [
+            false, false, false, false, false, false, true, true, false, false,
+            false, false, false, true, true, true, true, false, false, false,
+            false, false, true, true, true, false, false, false, false, false,
+            false, true, true, true, true, true, true, false, false, false,
+            false, true, true, true, true, true, true, true, true, false,
+            false, true, true, true, true, true, true, false, true, false,
+            false, true, true, true, true, true, true, true, true, false,
+            false, true, true, true, true, true, true, false, false, false,
+            false, false, true, true, true, true, false, false, false, false,
+            true, true, true, true, true, true, true, true, true, true
         ]
     };
 

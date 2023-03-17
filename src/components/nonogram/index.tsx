@@ -12,6 +12,7 @@ export interface NonogramDefinition {
     height: number;
     rowClues: number[][];
     colClues: number[][];
+    solution: boolean[];
 }
 
 interface Props {
@@ -26,13 +27,14 @@ enum CellState {
 
 const Nonogram = (props: Props) => {
     const { definition } = props;
-    const { width, height, rowClues, colClues } = definition;
+    const { width, height, rowClues, colClues, solution } = definition;
 
     const [grid, setGrid] = useState<CellState[]>(
         Array.from({ length: width * height }).map(() => CellState.Empty)
     );
 
     const [mouseDown, setMouseDown] = useState(false);
+    const [solved, setSolved] = useState(false);
     const currentFill = useRef<CellState>(CellState.Filled);
 
     const toggleCellFill = (index: number) => {
@@ -63,6 +65,24 @@ const Nonogram = (props: Props) => {
         setGrid(newGrid);
     };
 
+    const checkSolution = () => {
+        let errors = false;
+
+        for (let i = 0; i < grid.length; i++) {
+            if (
+                (grid[i] === CellState.Filled && !solution[i]) ||
+                ((grid[i] === CellState.Empty ||
+                    grid[i] === CellState.Crossed) &&
+                    solution[i])
+            ) {
+                errors = true;
+                break;
+            }
+        }
+
+        setSolved(!errors);
+    };
+
     const renderGrid = () => {
         return (
             <div
@@ -73,6 +93,9 @@ const Nonogram = (props: Props) => {
                 }}
             >
                 {Array.from({ length: width * height }).map((_, index) => {
+                    const row = Math.floor(index / width);
+                    const col = index % width;
+
                     return (
                         <div
                             key={index}
@@ -80,7 +103,15 @@ const Nonogram = (props: Props) => {
                                 "border border-slate-100 transition-colors",
                                 {
                                     "bg-slate-400":
-                                        grid[index] === CellState.Filled
+                                        grid[index] === CellState.Filled,
+                                    "border-r-slate-300":
+                                        col % 5 === 4 && col < width - 1,
+                                    "border-l-slate-300":
+                                        col % 5 === 0 && col > 0,
+                                    "border-b-slate-300":
+                                        row % 5 === 4 && row < height - 1,
+                                    "border-t-slate-300":
+                                        row % 5 === 0 && row > 0
                                 }
                             )}
                             onMouseDown={(e) => {
@@ -112,11 +143,19 @@ const Nonogram = (props: Props) => {
     };
 
     return (
-        <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-            <div></div>
-            <ColumnClues clues={colClues} />
-            <RowClues clues={rowClues} />
-            <div>{renderGrid()}</div>
+        <div className="flex flex-col items-center">
+            <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
+                <div></div>
+                <ColumnClues clues={colClues} />
+                <RowClues clues={rowClues} />
+                <div>{renderGrid()}</div>
+            </div>
+
+            <button className="mt-4" type="button" onClick={checkSolution}>
+                Check solution
+            </button>
+
+            <span>{JSON.stringify(solved)}</span>
         </div>
     );
 };
