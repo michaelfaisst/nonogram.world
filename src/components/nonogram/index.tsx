@@ -164,7 +164,7 @@ const Nonogram = (props: Props) => {
                         <div
                             key={index}
                             className={clsx(
-                                `border border-slate-100 transition-colors ${getCellColor(
+                                `border border-slate-100 ${getCellColor(
                                     index
                                 )}`,
                                 {
@@ -179,7 +179,6 @@ const Nonogram = (props: Props) => {
                                 }
                             )}
                             onMouseDown={(e) => {
-                                console.log(e.button);
                                 if (e.button === 0) {
                                     toggleCellFill(index);
                                 } else if (e.button === 2) {
