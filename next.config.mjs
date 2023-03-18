@@ -19,6 +19,9 @@ const config = {
     i18n: {
         locales: ["en"],
         defaultLocale: "en"
+    },
+    images: {
+        domains: ["cdn.discordapp.com"]
     }
 };
 export default config;
