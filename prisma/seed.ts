@@ -78,7 +78,8 @@ async function main() {
                 height: info.height,
                 solution,
                 rowClues,
-                colClues: columnClues
+                colClues: columnClues,
+                createdById: "clfx38kjq000005kj12fjfppq"
             }
         });
     });
