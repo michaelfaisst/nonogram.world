@@ -1,3 +1,4 @@
+import { Nonogram } from "@prisma/client";
 import { useRef, useState } from "react";
 
 import Cell from "./cell";
@@ -6,12 +7,11 @@ import RowClues from "./row-clues";
 import {
     FillState,
     MouseButton,
-    NonogramDefinition,
     indexToRowCol
 } from "./utils";
 
 interface Props {
-    definition: NonogramDefinition;
+    definition: Nonogram;
 }
 
 const Nonogram = (props: Props) => {

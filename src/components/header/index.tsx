@@ -92,7 +92,7 @@ const Header = () => {
     };
 
     return (
-        <div className="flex flex-row py-4 justify-between items-center">
+        <div className="flex flex-row py-4 justify-between items-center h-20">
             <h1 className="font-light text-slate-900 dark:text-white">
                 nonogram.world
             </h1>
