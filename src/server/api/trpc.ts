@@ -24,8 +24,8 @@ import { type Session } from "next-auth";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
+import { db } from "~/db";
 import { getServerAuthSession } from "~/server/auth";
-import { prisma } from "~/server/db";
 
 type CreateContextOptions = {
     session: Session | null;
@@ -44,7 +44,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
     return {
         session: opts.session,
-        prisma
+        db
     };
 };
 

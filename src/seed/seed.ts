@@ -1,11 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { createId } from "@paralleldrive/cuid2";
 import fs from "fs";
 import sharp from "sharp";
-
-const prisma = new PrismaClient();
+import { db } from "~/db";
+import { nonograms } from "~/db/schema/nonograms";
 
 async function main() {
-    fs.readdirSync("./prisma/seed-images").forEach(async (file) => {
+    const files = fs.readdirSync("./seed-images");
+
+    for (const file of files) {
         const name = file.split(".")[0];
 
         if (!name) return;
@@ -71,26 +73,21 @@ async function main() {
             columnClues.push(column);
         }
 
-        await prisma.nonogram.create({
-            data: {
-                title: name,
-                width: info.width,
-                height: info.height,
-                solution,
-                rowClues,
-                colClues: columnClues,
-                createdById: "clfx38kjq000005kj12fjfppq"
-            }
+        await db.insert(nonograms).values({
+            id: createId(),
+            type: "black_and_white",
+            title: name,
+            width: info.width,
+            height: info.height,
+            solution,
+            rowClues,
+            colClues: columnClues,
+            createdBy: "clfx38kjq000005kj12fjfppq"
         });
-    });
+    }
 }
 
-main()
-    .then(async () => {
-        await prisma.$disconnect();
-    })
-    .catch(async (e) => {
-        console.error(e);
-        await prisma.$disconnect();
-        process.exit(1);
-    });
+main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+});

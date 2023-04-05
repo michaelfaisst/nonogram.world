@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Nonogram } from "@prisma/client";
+import type { Nonogram } from "~/db/schema/nonograms";
 
 interface Props {
     nonogram: Nonogram;

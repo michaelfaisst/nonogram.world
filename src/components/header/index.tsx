@@ -69,7 +69,7 @@ const Header = () => {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                                onClick={() => signOut()}
+                                onClick={() => void signOut()}
                                 className="cursor-pointer"
                             >
                                 <LogOut className="mr-2 h-4 w-4" />
@@ -83,7 +83,7 @@ const Header = () => {
 
         return (
             <>
-                <Button variant="subtle" onClick={() => signIn()}>
+                <Button variant="subtle" onClick={() => void signIn()}>
                     Sign in
                 </Button>
                 <Button>Sign up</Button>

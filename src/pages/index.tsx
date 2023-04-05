@@ -4,15 +4,10 @@ import NonogramListItem from "~/components/nonogram-list-item";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-    const { data: nonograms, isLoading } =
-        api.nonogram.getNonograms.useInfiniteQuery(
-            {
-                limit: 10
-            },
-            {
-                getNextPageParam: (lastPage) => lastPage.nextCursor
-            }
-        );
+    const { data: nonograms, isLoading } = api.nonogram.getNonograms.useQuery({
+        limit: 10,
+        offset: 0
+    });
 
     if (isLoading) return <div>Loading...</div>;
 
@@ -22,13 +17,9 @@ const Home: NextPage = () => {
                 <h1 className="text-2xl font-light border-b border-b-slate-200 mb-3">
                     Nonograms
                 </h1>
-                {nonograms?.pages.map((page) => (
-                    <div key={page.nextCursor} className="flex flex-col gap-3">
-                        {page.nonograms.map((nonogram) => (
-                            <div className="flex flex-col gap-3">
-                                <NonogramListItem nonogram={nonogram} />
-                            </div>
-                        ))}
+                {nonograms?.map((nonogram) => (
+                    <div key={nonogram.id} className="flex flex-col gap-3">
+                        <NonogramListItem nonogram={nonogram} />
                     </div>
                 ))}
             </div>

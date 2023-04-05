@@ -1,14 +1,11 @@
-import { Nonogram } from "@prisma/client";
 import { useRef, useState } from "react";
 
 import Cell from "./cell";
 import ColumnClues from "./col-clues";
 import RowClues from "./row-clues";
-import {
-    FillState,
-    MouseButton,
-    indexToRowCol
-} from "./utils";
+import { FillState, MouseButton, indexToRowCol } from "./utils";
+
+import { Nonogram } from  "~/db/schema/nonograms";
 
 interface Props {
     definition: Nonogram;
@@ -162,8 +159,6 @@ const Nonogram = (props: Props) => {
         <div className="flex flex-col items-center">
             <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
                 <div></div>
-                <ColumnClues clues={colClues} />
-                <RowClues clues={rowClues} />
                 <div>{renderGrid()}</div>
             </div>
 
