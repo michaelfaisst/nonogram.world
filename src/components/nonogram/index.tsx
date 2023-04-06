@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
 
+import type { NonogramOutput } from "~/utils/types";
+
 import Cell from "./cell";
 import ColumnClues from "./col-clues";
 import RowClues from "./row-clues";
 import type { MouseButton } from "./utils";
 import { FillState, indexToRowCol } from "./utils";
 
-import type { Nonogram } from "~/db/schema";
-
 interface Props {
-    definition: Nonogram;
+    definition: NonogramOutput;
 }
 
 const Nonogram = (props: Props) => {
@@ -22,6 +22,9 @@ const Nonogram = (props: Props) => {
 
     const [pathStart, setPathStart] = useState<number | undefined>(undefined);
     const [currentPath, setCurrentPath] = useState<number[]>([]);
+    const [hoveredCell, setHoveredCell] = useState<number | undefined>(
+        undefined
+    );
 
     const [solved, setSolved] = useState(false);
     const currentFill = useRef<FillState>(FillState.Filled);
@@ -69,8 +72,8 @@ const Nonogram = (props: Props) => {
 
     const calculatePath = (index: number) => {
         if (pathStart === undefined) return;
-        const [startRow, startCol] = indexToRowCol(pathStart, width);
-        const [endRow, endCol] = indexToRowCol(index, width);
+        const [startRow, startCol] = indexToRowCol(width, pathStart);
+        const [endRow, endCol] = indexToRowCol(width, index);
 
         const rowDiff = endRow - startRow;
         const colDiff = endCol - startCol;
@@ -117,6 +120,8 @@ const Nonogram = (props: Props) => {
         return grid[index] || FillState.Empty;
     };
 
+    const [hightlightedRow, highlightedCol] = indexToRowCol(width, hoveredCell);
+
     const renderGrid = () => {
         return (
             <div
@@ -125,13 +130,21 @@ const Nonogram = (props: Props) => {
                     gridTemplateColumns: `repeat(${width}, 28px)`,
                     gridTemplateRows: `repeat(${height}, 28px)`
                 }}
+                onMouseLeave={() => {
+                    setHoveredCell(undefined);
+                }}
             >
                 {Array.from({ length: width * height }).map((_, index) => {
+                    const [row, col] = indexToRowCol(width, index);
                     return (
                         <Cell
                             key={index}
                             index={index}
                             gridWidth={width}
+                            highlight={
+                                row === hightlightedRow ||
+                                col === highlightedCol
+                            }
                             fillState={getCellFill(index)}
                             onMouseDown={(e) => {
                                 toggleCellFill(
@@ -149,6 +162,11 @@ const Nonogram = (props: Props) => {
                                     calculatePath(index);
                                 }
                             }}
+                            onMouseOver={() => {
+                                if (hoveredCell != index) {
+                                    setHoveredCell(index);
+                                }
+                            }}
                         />
                     );
                 })}
@@ -159,9 +177,12 @@ const Nonogram = (props: Props) => {
     return (
         <div className="flex flex-col items-center">
             <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-                <div/>
-                <ColumnClues clues={colClues} />
-                <RowClues clues={rowClues} />
+                <div />
+                <ColumnClues
+                    clues={colClues}
+                    highlightedColumn={highlightedCol}
+                />
+                <RowClues clues={rowClues} highlightedRow={hightlightedRow} />
 
                 <div>{renderGrid()}</div>
             </div>

@@ -17,11 +17,14 @@ const Home: NextPage = () => {
                 <h1 className="text-2xl font-light border-b border-b-slate-200 mb-3">
                     Nonograms
                 </h1>
-                {nonograms?.map((nonogram) => (
-                    <div key={nonogram.id} className="flex flex-col gap-3">
-                        <NonogramListItem nonogram={nonogram} />
-                    </div>
-                ))}
+                <div className="flex flex-col gap-2">
+                    {nonograms?.map((nonogram) => (
+                        <NonogramListItem
+                            key={nonogram.id}
+                            nonogram={nonogram}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     );

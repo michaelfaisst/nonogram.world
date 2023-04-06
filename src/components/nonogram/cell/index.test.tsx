@@ -14,7 +14,8 @@ describe("Cell", () => {
         gridWidth: 10,
         onMouseDown: vi.fn(),
         onMouseUp: vi.fn(),
-        onMouseEnter: vi.fn()
+        onMouseEnter: vi.fn(),
+        onMouseOver: vi.fn()
     };
 
     it("renders without errors", () => {

@@ -1,8 +1,11 @@
+import clsx from "clsx";
+
 interface Props {
     clues: number[][];
+    highlightedColumn?: number;
 }
 
-const ColumnClues = ({ clues }: Props) => {
+const ColumnClues = ({ clues, highlightedColumn }: Props) => {
     return (
         <div
             className="grid"
@@ -14,13 +17,19 @@ const ColumnClues = ({ clues }: Props) => {
                 return (
                     <div
                         key={index}
-                        className="flex flex-col justify-end items-center"
+                        className={clsx(
+                            "flex flex-col justify-end items-center",
+                            {
+                                "bg-slate-50 dark:bg-slate-900":
+                                    index === highlightedColumn
+                            }
+                        )}
                     >
                         {clue.map((clue, index) => {
                             return (
                                 <div
                                     key={index}
-                                    className="text-center h-7 text-slate-500 text-sm"
+                                    className="text-center h-7 text-slate-500 text-sm dark:text-slate-400"
                                 >
                                     {clue}
                                 </div>

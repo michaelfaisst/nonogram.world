@@ -34,16 +34,16 @@ export const nonogramRouter = createTRPCRouter({
     getById: publicProcedure
         .input(z.object({ id: z.string() }))
         .query(async ({ ctx, input }) => {
-            const nonogram = await ctx.db
+            const nonogramList = await ctx.db
                 .select()
                 .from(nonograms)
                 .where(eq(nonograms.id, input.id))
                 .limit(1);
 
-            if (!nonogram || nonogram.length === 0) {
+            if (!nonogramList || nonogramList.length === 0) {
                 throw new TRPCError({ code: "NOT_FOUND" });
             }
 
-            return nonogram[0];
+            return nonogramList[0]!;
         })
 });

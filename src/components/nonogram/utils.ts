@@ -16,8 +16,12 @@ export enum FillState {
 export type MouseButton = "left" | "right";
 
 export const indexToRowCol = (
-    index: number,
-    width: number
+    width: number,
+    index?: number
 ): [number, number] => {
+    if (index === undefined) {
+        return [-1, -1];
+    }
+
     return [Math.floor(index / width), index % width];
 };

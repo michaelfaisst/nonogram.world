@@ -16,11 +16,13 @@ const NonogramListItem = (props: Props) => {
             href={`/nonogram/${nonogram.id}`}
             className="bg-slate-50 p-3 rounded-xl border border-slate-100"
         >
-            <h2 className="mb-1">{nonogram.title}</h2>
-            <p className="text-slate-600">
+            <h2 className="mb-2">{nonogram.title}</h2>
+            <p className="text-sm text-slate-600">
                 Size: {nonogram.width}x{nonogram.height}
             </p>
-            <p>Created by: {nonogram.createdBy?.name}</p>
+            <p className="text-sm text-slate-600">
+                Created by: {nonogram.createdBy?.name}
+            </p>
         </Link>
     );
 };
