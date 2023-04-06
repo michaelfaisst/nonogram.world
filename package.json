@@ -9,8 +9,7 @@
         "start": "next start",
         "format": "prettier --write .",
         "test": "vitest",
-        "db:push": "pnpm drizzle-kit push:mysql --config drizzle.config.ts",
-        "db:seed": "ts-node src/seed/seed.ts"
+        "db:push": "pnpm drizzle-kit push:mysql --config drizzle.config.ts"
     },
     "dependencies": {
         "@heroicons/react": "2.0.16",

@@ -2,10 +2,10 @@ import React from "react";
 
 import Link from "next/link";
 
-import type { Nonogram } from "~/db/schema";
+import type { NonogramListOutput } from "~/utils/types";
 
 interface Props {
-    nonogram: Nonogram;
+    nonogram: NonogramListOutput;
 }
 
 const NonogramListItem = (props: Props) => {
@@ -20,6 +20,7 @@ const NonogramListItem = (props: Props) => {
             <p className="text-slate-600">
                 Size: {nonogram.width}x{nonogram.height}
             </p>
+            <p>Created by: {nonogram.createdBy?.name}</p>
         </Link>
     );
 };

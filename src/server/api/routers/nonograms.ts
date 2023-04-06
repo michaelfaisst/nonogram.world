@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm/expressions";
 import { z } from "zod";
-import { nonograms } from "~/db/schema";
+import { nonograms, users } from "~/db/schema";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const nonogramRouter = createTRPCRouter({
@@ -13,11 +13,23 @@ export const nonogramRouter = createTRPCRouter({
             })
         )
         .query(async ({ ctx, input }) => {
-            return await ctx.db
-                .select()
+            const result = await ctx.db
+                .select({
+                    id: nonograms.id,
+                    title: nonograms.title,
+                    width: nonograms.width,
+                    height: nonograms.height,
+                    createdBy: {
+                        id: users.id,
+                        name: users.name
+                    }
+                })
                 .from(nonograms)
+                .leftJoin(users, eq(nonograms.createdBy, users.id))
                 .limit(input.limit ?? 10)
                 .offset(input.offset ?? 0);
+
+            return result;
         }),
     getById: publicProcedure
         .input(z.object({ id: z.string() }))
