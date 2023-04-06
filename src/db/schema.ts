@@ -1,14 +1,17 @@
+import { InferModel } from "drizzle-orm";
 import {
     index,
-    integer,
-    pgTable,
+    int,
+    json,
+    mysqlEnum,
+    mysqlTable,
     text,
     timestamp,
     uniqueIndex,
     varchar
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/mysql-core";
 
-export const accounts = pgTable(
+export const accounts = mysqlTable(
     "accounts",
     {
         id: varchar("id", { length: 191 }).primaryKey().notNull(),
@@ -20,7 +23,7 @@ export const accounts = pgTable(
         }).notNull(),
         refresh_token: text("refresh_token"),
         access_token: text("access_token"),
-        expires_at: integer("expires_at"),
+        expires_at: int("expires_at"),
         token_type: varchar("token_type", { length: 191 }),
         scope: varchar("scope", { length: 191 }),
         id_token: text("id_token"),
@@ -34,7 +37,7 @@ export const accounts = pgTable(
     })
 );
 
-export const sessions = pgTable(
+export const sessions = mysqlTable(
     "sessions",
     {
         id: varchar("id", { length: 191 }).primaryKey().notNull(),
@@ -50,7 +53,7 @@ export const sessions = pgTable(
     })
 );
 
-export const users = pgTable(
+export const users = mysqlTable(
     "users",
     {
         id: varchar("id", { length: 191 }).primaryKey().notNull(),
@@ -64,7 +67,7 @@ export const users = pgTable(
     })
 );
 
-export const verificationTokens = pgTable(
+export const verificationTokens = mysqlTable(
     "verificationTokens",
     {
         identifier: varchar("identifier", { length: 191 })
@@ -79,3 +82,18 @@ export const verificationTokens = pgTable(
         )
     })
 );
+
+export const nonograms = mysqlTable("nonograms", {
+    id: varchar("id", { length: 191 }).primaryKey().notNull(),
+    title: varchar("name", { length: 191 }).notNull(),
+    type: mysqlEnum("nonogram_type", ["black_and_white"]).notNull(),
+    width: int("width").notNull(),
+    height: int("height").notNull(),
+    solution: json("solution").$type<boolean[]>().notNull(),
+    rowClues: json("row_clues").$type<number[][]>().notNull(),
+    colClues: json("col_clues").$type<number[][]>().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    createdBy: varchar("created_by", { length: 191 }).notNull()
+});
+
+export type Nonogram = InferModel<typeof nonograms>;

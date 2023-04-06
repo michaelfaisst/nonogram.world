@@ -1,8 +1,11 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { connect } from "@planetscale/database";
+import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { env } from "~/env.mjs";
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+const connection = connect({
+    host: env.DB_HOST,
+    username: env.DB_USER,
+    password: env.DB_PASSWORD
 });
 
-export const db = drizzle(pool);
+export const db = drizzle(connection);

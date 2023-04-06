@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm/expressions";
 import { z } from "zod";
-import { nonograms } from "~/db/schema/nonograms";
+import { nonograms } from "~/db/schema";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const nonogramRouter = createTRPCRouter({

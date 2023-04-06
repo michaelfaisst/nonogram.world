@@ -1,8 +1,9 @@
 import { createId } from "@paralleldrive/cuid2";
 import fs from "fs";
 import sharp from "sharp";
-import { db } from "~/db";
-import { nonograms } from "~/db/schema/nonograms";
+
+import { db } from "../db";
+import { nonograms } from "../db/schema";
 
 async function main() {
     const files = fs.readdirSync("./seed-images");

@@ -2,15 +2,10 @@ import type { Adapter } from "next-auth/adapters";
 
 import { createId } from "@paralleldrive/cuid2";
 import { and, eq } from "drizzle-orm/expressions";
-import type { NodePgDatabase } from "drizzle-orm/node-postgres";
-import {
-    accounts,
-    sessions,
-    users,
-    verificationTokens
-} from "~/db/schema/auth";
+import type { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
+import { accounts, sessions, users, verificationTokens } from "~/db/schema";
 
-export function DrizzleAdapter(db: NodePgDatabase): Adapter {
+export function DrizzleAdapter(db: PlanetScaleDatabase): Adapter {
     return {
         async createUser(userData) {
             await db.insert(users).values({
