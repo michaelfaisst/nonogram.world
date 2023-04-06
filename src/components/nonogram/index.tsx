@@ -3,9 +3,10 @@ import { useRef, useState } from "react";
 import Cell from "./cell";
 import ColumnClues from "./col-clues";
 import RowClues from "./row-clues";
-import { FillState, MouseButton, indexToRowCol } from "./utils";
+import type { MouseButton } from "./utils";
+import { FillState, indexToRowCol } from "./utils";
 
-import { Nonogram } from  "~/db/schema/nonograms";
+import type { Nonogram } from "~/db/schema";
 
 interface Props {
     definition: Nonogram;
