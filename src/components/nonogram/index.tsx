@@ -159,7 +159,10 @@ const Nonogram = (props: Props) => {
     return (
         <div className="flex flex-col items-center">
             <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-                <div></div>
+                <div/>
+                <ColumnClues clues={colClues} />
+                <RowClues clues={rowClues} />
+
                 <div>{renderGrid()}</div>
             </div>
 
