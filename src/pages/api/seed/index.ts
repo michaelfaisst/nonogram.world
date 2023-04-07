@@ -1,36 +1,39 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { createId } from "@paralleldrive/cuid2";
-import fs from "fs";
+import { glob } from "glob";
 import path from "path";
 import sharp from "sharp";
 import { db } from "~/db";
 import { nonograms } from "~/db/schema";
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     try {
-        const imageDirectory = path.join(process.cwd(), "seed-images");
-        const files = fs.readdirSync(imageDirectory);
+        const images = await glob("seed-images/**/*.png");
 
-        for (const file of files) {
-            const name = file.split(".")[0];
+        for (const file of images) {
+            let name = file.split(".")[0];
+            name = name?.substring(name.lastIndexOf("/") + 1);
 
             if (!name) return;
 
-            const { data, info } = await sharp(`${imageDirectory}/${file}`)
+            const { data, info } = await sharp(path.join(process.cwd(), file))
                 .raw()
                 .toBuffer({ resolveWithObject: true });
 
             const pixelArray = new Uint8ClampedArray(data.buffer);
             const solution = [];
 
-            for (let i = 0; i < pixelArray.length; i++) {
-                if (i % 4 === 3) {
-                    solution.push(pixelArray[i] === 0 ? false : true);
-                }
+            const chunkSize = 4;
+            for (let i = 0; i < pixelArray.length; i += chunkSize) {
+                const chunk = pixelArray.slice(i, i + chunkSize);
+                const isEmpty =
+                    (chunk[0] === 255 &&
+                        chunk[1] === 255 &&
+                        chunk[2] === 255) ||
+                    chunk[3] === 0;
+
+                solution.push(!isEmpty);
             }
 
             const rowClues = [];
