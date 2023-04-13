@@ -42,7 +42,7 @@ export const authRouter = createTRPCRouter({
                     id: createId(),
                     email,
                     name: userName,
-                    emailVerified: new Date(),
+                    emailVerified: null,
                     image: null,
                     password: hash
                 };

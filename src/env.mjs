@@ -5,11 +5,13 @@ import { z } from "zod";
  * built with invalid env vars.
  */
 const server = z.object({
+    NODE_ENV: z.enum(["development", "test", "production"]),
+
     DB_URL: z.string(),
     DB_HOST: z.string(),
     DB_USER: z.string(),
     DB_PASSWORD: z.string(),
-    NODE_ENV: z.enum(["development", "test", "production"]),
+
     NEXTAUTH_SECRET:
         process.env.NODE_ENV === "production"
             ? z.string().min(1)
@@ -22,8 +24,14 @@ const server = z.object({
         process.env.VERCEL ? z.string().min(1) : z.string().url()
     ),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
+    //
     DISCORD_CLIENT_ID: z.string(),
-    DISCORD_CLIENT_SECRET: z.string()
+    DISCORD_CLIENT_SECRET: z.string(),
+
+    EMAIL_HOST: z.string(),
+    EMAIL_PORT: z.string(),
+    EMAIL_USER: z.string(),
+    EMAIL_PASSWORD: z.string()
 });
 
 /**
@@ -41,16 +49,23 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
+    NODE_ENV: process.env.NODE_ENV,
+
     DB_URL: process.env.DB_URL,
     DB_HOST: process.env.DB_HOST,
     DB_USER: process.env.DB_USER,
     DB_PASSWORD: process.env.DB_PASSWORD,
-    NODE_ENV: process.env.NODE_ENV,
+
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-    DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+
+    EMAIL_HOST: process.env.EMAIL_HOST,
+    EMAIL_PORT: process.env.EMAIL_PORT,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
 };
 
 // Don't touch the part below
