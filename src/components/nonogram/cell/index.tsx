@@ -1,5 +1,5 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
+import { X } from "lucide-react";
 
 import { FillState, indexToRowCol } from "../utils";
 
@@ -54,7 +54,7 @@ const Cell = (props: Props) => {
             }}
         >
             {fillState === FillState.Crossed && (
-                <XMarkIcon className="text-slate-300 dark:text-slate-700" />
+                <X className="text-slate-300 dark:text-slate-700" />
             )}
         </div>
     );

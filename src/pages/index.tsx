@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 
+import Layout from "~/components/layout";
 import NonogramListItem from "~/components/nonogram-list-item";
 import { api } from "~/utils/api";
 
@@ -12,7 +13,7 @@ const Home: NextPage = () => {
     if (isLoading) return <div>Loading...</div>;
 
     return (
-        <>
+        <Layout>
             <div>
                 <h1 className="text-2xl font-light border-b border-b-slate-200 mb-3">
                     Nonograms
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
                     ))}
                 </div>
             </div>
-        </>
+        </Layout>
     );
 };
 

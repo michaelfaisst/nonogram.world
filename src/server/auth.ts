@@ -1,12 +1,24 @@
-import { type GetServerSidePropsContext } from "next";
-import {
+import type {
+    GetServerSidePropsContext,
+    NextApiRequest,
+    NextApiResponse
+} from "next";
+import NextAuth, {
     type DefaultSession,
     type NextAuthOptions,
     getServerSession
 } from "next-auth";
+import { decode, encode } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
+import { TRPCError } from "@trpc/server";
+import bcrypt from "bcrypt";
+import Cookies from "cookies";
+import { randomUUID } from "crypto";
+import { eq } from "drizzle-orm/expressions";
 import { db } from "~/db";
+import { users } from "~/db/schema";
 import { env } from "~/env.mjs";
 
 import { DrizzleAdapter } from "./adapters/drizzleAdapter";
@@ -32,12 +44,16 @@ declare module "next-auth" {
     // }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
+const drizzleAdapter = DrizzleAdapter(db);
+
+// Info:
+// This shit needs to be so complicated to be able to use credentials with a database strategy
+// because the guys from next-auth simply don't want people to use credentials and can't
+// be bothered to just implemented some nicer workflow for this
+//
+// followed the following guide for this crap:
+// https://branche.online/next-auth-credentials-provider-with-the-database-session-strategy/
+const authOptions: NextAuthOptions = {
     callbacks: {
         session({ session, user }) {
             if (session.user) {
@@ -47,23 +63,142 @@ export const authOptions: NextAuthOptions = {
             return session;
         }
     },
-    adapter: DrizzleAdapter(db),
+    adapter: drizzleAdapter,
+    pages: {
+        signIn: "/auth/sign-in"
+    },
     providers: [
         DiscordProvider({
+            id: "discord",
             clientId: env.DISCORD_CLIENT_ID,
             clientSecret: env.DISCORD_CLIENT_SECRET
+        }),
+        CredentialsProvider({
+            id: "credentials",
+            name: "Credentials",
+            credentials: {
+                email: {
+                    label: "Email",
+                    type: "text",
+                    placeholder: "Email"
+                },
+                password: { label: "Password", type: "password" }
+            },
+            authorize: async (credentials) => {
+                // TODO: better error handling for invalid credentials, account not activated, etc.
+                if (!credentials) {
+                    return null;
+                }
+
+                try {
+                    const userList = await db
+                        .select()
+                        .from(users)
+                        .where(eq(users.email, credentials.email));
+
+                    if (userList[0] === undefined) {
+                        throw new TRPCError({
+                            code: "UNAUTHORIZED"
+                        });
+                    }
+
+                    const user = userList[0];
+
+                    const passwordValid = await bcrypt.compare(
+                        credentials.password,
+                        user.password || ""
+                    );
+
+                    if (!passwordValid || !user.emailVerified) {
+                        throw new TRPCError({
+                            code: "UNAUTHORIZED"
+                        });
+                    }
+
+                    return { ...user, password: undefined };
+                } catch (e) {
+                    console.error(e);
+                    return null;
+                }
+            }
         })
-        /**
-         * ...add more providers here.
-         *
-         * Most other providers require a bit more work than the Discord provider. For example, the
-         * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-         * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-         *
-         * @see https://next-auth.js.org/providers/github
-         */
     ]
 };
+
+const fromDate = (time: number, date = Date.now()) => {
+    return new Date(date + time * 1000);
+};
+
+export async function auth(req: NextApiRequest, res: NextApiResponse) {
+    authOptions.callbacks = {
+        ...authOptions.callbacks,
+        signIn: async ({ user, account, profile, email, credentials }) => {
+            if (
+                req.query.nextauth?.includes("callback") &&
+                req.query.nextauth?.includes("credentials") &&
+                req.method === "POST"
+            ) {
+                if (user) {
+                    const sessionToken = randomUUID();
+                    const sessionExpiry = fromDate(60 * 60 * 24 * 7); // 7 days
+
+                    await drizzleAdapter.createSession({
+                        sessionToken,
+                        userId: user.id,
+                        expires: sessionExpiry
+                    });
+
+                    const cookies = new Cookies(req, res);
+
+                    cookies.set("next-auth.session-token", sessionToken, {
+                        expires: sessionExpiry
+                    });
+                }
+            }
+
+            return true;
+        }
+    };
+
+    authOptions.jwt = {
+        ...authOptions.jwt,
+        encode: async ({ secret, token, maxAge }) => {
+            if (
+                req.query.nextauth?.includes("callback") &&
+                req.query.nextauth?.includes("credentials") &&
+                req.method === "POST"
+            ) {
+                const cookies = new Cookies(req, res);
+                const cookie = cookies.get("next-auth.session-token");
+
+                if (cookie) {
+                    return cookie;
+                } else {
+                    return "";
+                }
+            }
+
+            return encode({ token, secret, maxAge });
+        },
+        decode: async ({ secret, token }) => {
+            if (
+                req.query.nextauth?.includes("callback") &&
+                req.query.nextauth?.includes("credentials") &&
+                req.method === "POST"
+            ) {
+                return null;
+            }
+
+            return decode({ token, secret });
+        }
+    };
+    return await NextAuth(req, res, authOptions);
+}
+/**
+ * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
+ *
+ * @see https://next-auth.js.org/configuration/options
+ */
 
 /**
  * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.

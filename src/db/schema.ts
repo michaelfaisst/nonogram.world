@@ -30,9 +30,6 @@ export const accounts = mysqlTable(
         session_state: text("session_state")
     },
     (account) => ({
-        providerProviderAccountIdIndex: uniqueIndex(
-            "accounts__provider__providerAccountId__idx"
-        ).on(account.provider, account.providerAccountId),
         userIdIndex: index("accounts__userId__idx").on(account.userId)
     })
 );
@@ -60,7 +57,8 @@ export const users = mysqlTable(
         name: varchar("name", { length: 191 }),
         email: varchar("email", { length: 191 }).notNull(),
         emailVerified: timestamp("emailVerified"),
-        image: varchar("image", { length: 191 })
+        image: varchar("image", { length: 191 }),
+        password: varchar("password", { length: 191 })
     },
     (user) => ({
         emailIndex: uniqueIndex("users__email__idx").on(user.email)

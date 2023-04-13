@@ -26,9 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
                             font-family: ${montserrat.style.fontFamily};
                         }
                     `}</style>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
+                    <Component {...pageProps} />
                 </SessionProvider>
             </ThemeProvider>
         </div>

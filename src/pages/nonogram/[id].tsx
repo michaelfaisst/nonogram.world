@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
+import Layout from "~/components/layout";
 import Nonogram from "~/components/nonogram";
 import { api } from "~/utils/api";
 
@@ -21,9 +22,9 @@ const NonogramPage: NextPage = () => {
     }
 
     return (
-        <div>
+        <Layout>
             <Nonogram definition={nonogram} />
-        </div>
+        </Layout>
     );
 };
 

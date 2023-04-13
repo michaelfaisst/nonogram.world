@@ -1,5 +1,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
 
 import { LogOut, Sun } from "lucide-react";
 
@@ -19,6 +20,7 @@ import {
 const Header = () => {
     const { data: session, status } = useSession();
     const { theme, setTheme } = useTheme();
+    const router = useRouter();
 
     const renderAvatar = (className?: string) => {
         return (
@@ -83,10 +85,13 @@ const Header = () => {
 
         return (
             <>
-                <Button variant="subtle" onClick={() => void signIn()}>
-                    Sign in
+                <Button
+                    variant="subtle"
+                    onClick={() => router.push("/auth/sign-up")}
+                >
+                    Sign up
                 </Button>
-                <Button>Sign up</Button>
+                <Button onClick={() => void signIn()}>Sign in</Button>
             </>
         );
     };
