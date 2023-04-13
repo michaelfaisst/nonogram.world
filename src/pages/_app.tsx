@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import { type AppType } from "next/app";
 import { Montserrat } from "next/font/google";
 
-import Layout from "~/components/layout";
 import "~/styles/globals.css";
 import { api } from "~/utils/api";
 

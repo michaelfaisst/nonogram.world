@@ -132,7 +132,7 @@ const fromDate = (time: number, date = Date.now()) => {
 export async function auth(req: NextApiRequest, res: NextApiResponse) {
     authOptions.callbacks = {
         ...authOptions.callbacks,
-        signIn: async ({ user, account, profile, email, credentials }) => {
+        signIn: async ({ user }) => {
             if (
                 req.query.nextauth?.includes("callback") &&
                 req.query.nextauth?.includes("credentials") &&
@@ -192,6 +192,7 @@ export async function auth(req: NextApiRequest, res: NextApiResponse) {
             return decode({ token, secret });
         }
     };
+
     return await NextAuth(req, res, authOptions);
 }
 /**

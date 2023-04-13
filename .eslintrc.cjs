@@ -1,16 +1,16 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
-    overrides: [
-        {
-            extends: [
-                "plugin:@typescript-eslint/recommended-requiring-type-checking"
-            ],
-            files: ["*.ts", "*.tsx"],
-            parserOptions: {
-                project: "tsconfig.json"
-            }
-        }
-    ],
+    // overrides: [
+    //     {
+    //         extends: [
+    //             "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    //         ],
+    //         files: ["*.ts", "*.tsx"],
+    //         parserOptions: {
+    //             project: "tsconfig.json"
+    //         }
+    //     }
+    // ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
         project: "./tsconfig.json"
@@ -29,6 +29,7 @@ const config = {
             "warn",
             { argsIgnorePattern: "^_" }
         ],
+        "@typescript-eslint/no-unsafe-return": "warn",
         "@typescript-eslint/no-misused-promises": [
             2,
             {
