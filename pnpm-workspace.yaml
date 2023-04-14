@@ -3,4 +3,5 @@ packages:
     - "packages/auth"
     - "packages/api"
     - "packages/db"
+    - "packages/mail"
     - "packages/config/*"

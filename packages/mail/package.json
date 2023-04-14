@@ -1,0 +1,25 @@
+{
+    "name": "@nw/mails",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "license": "ISC",
+    "scripts": {
+        "clean": "rm -rf .turbo node_modules",
+        "lint": "eslint .",
+        "lint:fix": "pnpm lint --fix",
+        "type-check": "tsc --noEmit",
+        "dev": "email dev --port 3001"
+    },
+    "devDependencies": {
+        "@nw/eslint-config": "workspace:^1.0.0",
+        "eslint": "^8.38.0",
+        "typescript": "^5.0.4"
+    },
+    "dependencies": {
+        "@react-email/button": "0.0.8",
+        "@react-email/html": "0.0.4",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-email": "1.9.1"
+    }
+}
