@@ -5,7 +5,9 @@
     "types": "index.ts",
     "license": "ISC",
     "scripts": {
-        "db:push": "pnpm drizzle-kit push:mysql --config drizzle.config.ts"
+        "db:push": "pnpm with-env drizzle-kit push:mysql --config drizzle.config.ts",
+        "db:generate": "pnpm drizzle-kit generate:mysql --config drizzle.config.ts",
+        "with-env": "dotenv -e ../../.env --"
     },
     "dependencies": {
         "@planetscale/database": "1.7.0",
