@@ -20,11 +20,10 @@
  *
  * This is where the tRPC API is initialized, connecting the context and transformer.
  */
-import { getServerAuthSession } from "@nw/auth";
+import { getServerAuthSession, type Session } from "@nw/auth";
 import { db } from "@nw/db";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
 import superjson from "superjson";
 
 type CreateContextOptions = {
