@@ -1,7 +1,8 @@
+import { nonograms, users } from "@nw/db";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm/expressions";
 import { z } from "zod";
-import { nonograms, users } from "~/db/schema";
+
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const nonogramRouter = createTRPCRouter({
@@ -40,10 +41,10 @@ export const nonogramRouter = createTRPCRouter({
                 .where(eq(nonograms.id, input.id))
                 .limit(1);
 
-            if (!nonogramList || nonogramList.length === 0) {
+            if (!nonogramList || nonogramList[0] === undefined) {
                 throw new TRPCError({ code: "NOT_FOUND" });
             }
 
-            return nonogramList[0]!;
+            return nonogramList[0];
         })
 });

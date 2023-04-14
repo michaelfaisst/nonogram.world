@@ -1,11 +1,9 @@
+import path from "path";
 import type { NextApiRequest, NextApiResponse } from "next";
-
+import { db, nonograms } from "@nw/db";
 import { createId } from "@paralleldrive/cuid2";
 import { glob } from "glob";
-import path from "path";
 import sharp from "sharp";
-import { db } from "~/db";
-import { nonograms } from "~/db/schema";
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     try {

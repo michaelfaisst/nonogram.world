@@ -4,6 +4,7 @@ import type {
     NextApiRequest,
     NextApiResponse
 } from "next";
+import { db, users } from "@nw/db";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
@@ -17,8 +18,6 @@ import { decode, encode } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
-import { db } from "~/db";
-import { users } from "~/db/schema";
 import { env } from "~/env.mjs";
 import { DrizzleAdapter } from "./adapters/drizzleAdapter";
 

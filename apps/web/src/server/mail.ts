@@ -1,10 +1,6 @@
 import nodemailer from "nodemailer";
-import { env } from "~/env.mjs";
 
-console.log("EMAIL_HOST: ", env.EMAIL_HOST);
-console.log("EMAIL_PORT: ", env.EMAIL_PORT);
-console.log("EMAIL_USER: ", env.EMAIL_USER);
-console.log("EMAIL_PASSWORD: ", env.EMAIL_PASSWORD);
+import { env } from "~/env.mjs";
 
 export const mailTransporter = nodemailer.createTransport({
     host: env.EMAIL_HOST,

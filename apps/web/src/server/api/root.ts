@@ -1,5 +1,4 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-
 import { authRouter } from "./routers/auth";
 import { nonogramRouter } from "./routers/nonograms";
 

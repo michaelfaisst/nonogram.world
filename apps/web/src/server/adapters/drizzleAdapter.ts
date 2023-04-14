@@ -1,9 +1,8 @@
-import type { Adapter } from "next-auth/adapters";
-
+import { accounts, sessions, users, verificationTokens } from "@nw/db";
 import { createId } from "@paralleldrive/cuid2";
 import { and, eq } from "drizzle-orm/expressions";
 import type { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
-import { accounts, sessions, users, verificationTokens } from "~/db/schema";
+import type { Adapter } from "next-auth/adapters";
 
 export function DrizzleAdapter(db: PlanetScaleDatabase): Adapter {
     return {

@@ -1,10 +1,11 @@
+import { accounts, users } from "@nw/db";
 import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import type { InferModel } from "drizzle-orm";
 import { eq, or } from "drizzle-orm/expressions";
 import { z } from "zod";
-import { accounts, users } from "~/db/schema";
+
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 type NewUser = InferModel<typeof users, "insert">;

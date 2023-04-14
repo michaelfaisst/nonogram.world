@@ -1,4 +1,3 @@
-import type { InferModel } from "drizzle-orm";
 import {
     index,
     int,
@@ -101,5 +100,3 @@ export const nonograms = mysqlTable(
         )
     })
 );
-
-export type Nonogram = InferModel<typeof nonograms>;
