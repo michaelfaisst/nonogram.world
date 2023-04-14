@@ -1,8 +1,7 @@
+import { useRouter } from "next/router";
+import { LogOut, Sun } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/router";
-
-import { LogOut, Sun } from "lucide-react";
 
 import {
     Avatar,
@@ -50,7 +49,7 @@ const Header = () => {
                                     <div className="mb-0.5">
                                         {session.user.name}
                                     </div>
-                                    <div className="text-gray-400 text-xs">
+                                    <div className="text-xs text-gray-400">
                                         {session.user.email}
                                     </div>
                                 </div>
@@ -87,7 +86,7 @@ const Header = () => {
             <>
                 <Button
                     variant="subtle"
-                    onClick={() => router.push("/auth/sign-up")}
+                    onClick={() => void router.push("/auth/sign-up")}
                 >
                     Sign up
                 </Button>
@@ -97,7 +96,7 @@ const Header = () => {
     };
 
     return (
-        <div className="flex flex-row py-4 justify-between items-center h-20">
+        <div className="flex h-20 flex-row items-center justify-between py-4">
             <h1 className="font-light text-slate-900 dark:text-white">
                 nonogram.world
             </h1>

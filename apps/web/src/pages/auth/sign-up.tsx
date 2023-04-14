@@ -1,12 +1,11 @@
-import { useForm } from "react-hook-form";
-
 import Link from "next/link";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import z from "zod";
+
+import { api } from "~/utils/api";
 import { Button, Input, Label } from "~/components/ui";
 import InputError from "~/components/ui/input-error";
-import { api } from "~/utils/api";
 
 const schema = z
     .object({
@@ -44,21 +43,21 @@ const SignUp = () => {
     };
 
     return (
-        <div className="w-screen min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center flex-col">
-            <h2 className="text-sm font-light text-slate-900 dark:text-white mb-4">
+        <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-slate-100 dark:bg-slate-950">
+            <h2 className="mb-4 text-sm font-light text-slate-900 dark:text-white">
                 nonogram.world
             </h2>
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-xl shadow-lg flex flex-col">
-                <h1 className="font-semibold text-center text-lg mb-6">
+            <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                <h1 className="mb-6 text-center text-lg font-semibold">
                     Sign up
                 </h1>
 
                 <form
-                    className="flex flex-col w-80"
-                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex w-80 flex-col"
+                    onSubmit={(e) => void handleSubmit(onSubmit)(e)}
                 >
                     <div className="mb-4">
-                        <Label htmlFor="email" className="block mb-2">
+                        <Label htmlFor="email" className="mb-2 block">
                             Email
                         </Label>
                         <Input
@@ -70,7 +69,7 @@ const SignUp = () => {
                     </div>
 
                     <div className="mb-4">
-                        <Label htmlFor="userName" className="block mb-2">
+                        <Label htmlFor="userName" className="mb-2 block">
                             Username
                         </Label>
                         <Input
@@ -82,7 +81,7 @@ const SignUp = () => {
                     </div>
 
                     <div className="mb-4">
-                        <Label htmlFor="password" className="block mb-2">
+                        <Label htmlFor="password" className="mb-2 block">
                             Password
                         </Label>
                         <Input
@@ -97,7 +96,7 @@ const SignUp = () => {
                     <div className="mb-4">
                         <Label
                             htmlFor="passwordConfirmation"
-                            className="block mb-2"
+                            className="mb-2 block"
                         >
                             Password confirmation
                         </Label>
@@ -113,7 +112,7 @@ const SignUp = () => {
                     </div>
 
                     <Button type="submit">Create Account</Button>
-                    <div className="my-3 text-center text-slate-400 text-sm">
+                    <div className="my-3 text-center text-sm text-slate-400">
                         <span>Already have an account? </span>
                         <Link href="/auth/sign-in" className="text-slate-900">
                             Sign in

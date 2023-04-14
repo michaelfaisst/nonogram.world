@@ -1,26 +1,25 @@
+import { randomUUID } from "crypto";
 import type {
     GetServerSidePropsContext,
     NextApiRequest,
     NextApiResponse
 } from "next";
+import { TRPCError } from "@trpc/server";
+import bcrypt from "bcrypt";
+import Cookies from "cookies";
+import { eq } from "drizzle-orm/expressions";
 import NextAuth, {
+    getServerSession,
     type DefaultSession,
-    type NextAuthOptions,
-    getServerSession
+    type NextAuthOptions
 } from "next-auth";
 import { decode, encode } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
-import { TRPCError } from "@trpc/server";
-import bcrypt from "bcrypt";
-import Cookies from "cookies";
-import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm/expressions";
 import { db } from "~/db";
 import { users } from "~/db/schema";
 import { env } from "~/env.mjs";
-
 import { DrizzleAdapter } from "./adapters/drizzleAdapter";
 
 /**
