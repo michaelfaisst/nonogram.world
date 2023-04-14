@@ -18,8 +18,7 @@ import { decode, encode } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
 
-import { env } from "~/env.mjs";
-import { DrizzleAdapter } from "./adapters/drizzleAdapter";
+import { DrizzleAdapter } from "./drizzleAdapter";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -68,8 +67,8 @@ const authOptions: NextAuthOptions = {
     providers: [
         DiscordProvider({
             id: "discord",
-            clientId: env.DISCORD_CLIENT_ID,
-            clientSecret: env.DISCORD_CLIENT_SECRET
+            clientId: process.env.DISCORD_CLIENT_ID as string,
+            clientSecret: process.env.DISCORD_CLIENT_SECRET as string
         }),
         CredentialsProvider({
             id: "credentials",

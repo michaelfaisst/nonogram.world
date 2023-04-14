@@ -1,3 +1,3 @@
-import { auth } from "~/server/auth";
+import { auth } from "@nw/auth";
 
 export default auth;

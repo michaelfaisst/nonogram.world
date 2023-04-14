@@ -34,11 +34,14 @@ importers:
       '@hookform/resolvers':
         specifier: 3.0.1
         version: 3.0.1(react-hook-form@7.43.9)
+      '@nw/auth':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/auth
       '@nw/db':
-        specifier: ^1.0.0
+        specifier: workspace:^1.0.0
         version: link:../../packages/db
       '@nw/tailwind-config':
-        specifier: ^1.0.0
+        specifier: workspace:^1.0.0
         version: link:../../packages/config/tailwind
       '@paralleldrive/cuid2':
         specifier: 2.2.0
@@ -73,6 +76,9 @@ importers:
       '@trpc/server':
         specifier: ^10.20.0
         version: 10.20.0
+      '@types/bcrypt':
+        specifier: 5.0.0
+        version: 5.0.0
       '@types/nodemailer':
         specifier: 6.4.7
         version: 6.4.7
@@ -85,9 +91,6 @@ importers:
       clsx:
         specifier: 1.2.1
         version: 1.2.1
-      cookies:
-        specifier: 0.8.0
-        version: 0.8.0
       drizzle-orm:
         specifier: 0.23.11
         version: 0.23.11(@planetscale/database@1.7.0)
@@ -129,26 +132,17 @@ importers:
         version: 3.21.4
     devDependencies:
       '@nw/eslint-config':
-        specifier: ^1.0.0
+        specifier: workspace:^1.0.0
         version: link:../../packages/config/eslint
       '@testing-library/react':
         specifier: 14.0.0
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
-      '@types/bcrypt':
-        specifier: 5.0.0
-        version: 5.0.0
-      '@types/cookies':
-        specifier: 0.7.7
-        version: 0.7.7
       '@types/eslint':
         specifier: ^8.37.0
         version: 8.37.0
       '@types/node':
         specifier: ^18.15.11
         version: 18.15.11
-      '@types/nonogram-solver':
-        specifier: 2.0.2
-        version: 2.0.2
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
@@ -164,6 +158,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.21)
+      dotenv-cli:
+        specifier: 7.2.1
+        version: 7.2.1
       eslint:
         specifier: ^8.38.0
         version: 8.38.0
@@ -188,6 +185,80 @@ importers:
       vitest:
         specifier: 0.30.1
         version: 0.30.1(jsdom@21.1.1)
+
+  packages/api:
+    dependencies:
+      '@trpc/client':
+        specifier: ^10.20.0
+        version: 10.20.0(@trpc/server@10.20.0)
+      '@trpc/server':
+        specifier: ^10.20.0
+        version: 10.20.0
+      superjson:
+        specifier: 1.12.2
+        version: 1.12.2
+      zod:
+        specifier: 3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@nw/eslint-config':
+        specifier: workspace:^1.0.0
+        version: link:../config/eslint
+      eslint:
+        specifier: ^8.38.0
+        version: 8.38.0
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  packages/auth:
+    dependencies:
+      '@nw/db':
+        specifier: workspace:*
+        version: link:../db
+      '@paralleldrive/cuid2':
+        specifier: 2.2.0
+        version: 2.2.0
+      '@trpc/server':
+        specifier: ^10.20.0
+        version: 10.20.0
+      bcrypt:
+        specifier: 5.1.0
+        version: 5.1.0
+      cookies:
+        specifier: 0.8.0
+        version: 0.8.0
+      drizzle-orm:
+        specifier: 0.23.11
+        version: 0.23.11(@planetscale/database@1.7.0)
+      next:
+        specifier: ^13.3.0
+        version: 13.3.0(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
+      next-auth:
+        specifier: ^4.22.0
+        version: 4.22.0(next@13.3.0)(nodemailer@6.9.1)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@nw/eslint-config':
+        specifier: workspace:^1.0.0
+        version: link:../config/eslint
+      '@types/bcrypt':
+        specifier: 5.0.0
+        version: 5.0.0
+      '@types/cookies':
+        specifier: 0.7.7
+        version: 0.7.7
+      eslint:
+        specifier: ^8.38.0
+        version: 8.38.0
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
 
   packages/config/eslint:
     dependencies:
@@ -241,6 +312,9 @@ importers:
         specifier: 0.23.11
         version: 0.23.11(@planetscale/database@1.7.0)
     devDependencies:
+      '@nw/eslint-config':
+        specifier: workspace:^1.0.0
+        version: link:../config/eslint
       '@types/node':
         specifier: ^18.15.11
         version: 18.15.11
@@ -250,6 +324,9 @@ importers:
       drizzle-kit:
         specifier: 0.17.1-609a4f0
         version: 0.17.1-609a4f0
+      eslint:
+        specifier: ^8.38.0
+        version: 8.38.0
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -1471,7 +1548,6 @@ packages:
     resolution: {integrity: sha512-agtcFKaruL8TmcvqbndlqHPSJgsolhf/qPWchFlgnW1gECTN/nKbFcoFnvKAQRFfKbh+BO6A3SWdJu9t+xF3Lw==}
     dependencies:
       '@types/node': 18.15.11
-    dev: true
 
   /@types/body-parser@1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
@@ -1554,10 +1630,6 @@ packages:
     dependencies:
       '@types/node': 18.15.11
     dev: false
-
-  /@types/nonogram-solver@2.0.2:
-    resolution: {integrity: sha512-VNIpAeTzLm6OTw39BABaHno8bBYxr/wDcFovk0909iauecnRt2lhqRK1cT01DKiQi/JfIoH9purNub4v/WZX4A==}
-    dev: true
 
   /@types/prettier@2.7.2:
     resolution: {integrity: sha512-KufADq8uQqo1pYKVIYzfKbJfBAc0sOeXqGbFaSpv8MRmC/zXgowNZmFcbngndGk922QDmOASEXUZCaY48gs4cg==}

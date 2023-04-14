@@ -16,7 +16,7 @@ const config = {
      *
      * @see https://github.com/vercel/next.js/issues/41980
      */
-    transpilePackages: ["@nw/db"],
+    transpilePackages: ["@nw/db", "@nw/auth"],
     i18n: {
         locales: ["en"],
         defaultLocale: "en"
