@@ -2,8 +2,7 @@ import { cleanup, fireEvent, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { FillState } from "../utils";
-import Cell from "./";
-import type { Props } from "./";
+import Cell, { type Props } from "./";
 
 describe("Cell", () => {
     afterEach(cleanup);

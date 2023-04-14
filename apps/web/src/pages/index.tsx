@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 
+import { api } from "~/utils/api";
 import Layout from "~/components/layout";
 import NonogramListItem from "~/components/nonogram-list-item";
-import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
     const { data: nonograms, isLoading } = api.nonogram.getNonograms.useQuery({
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     return (
         <Layout>
             <div>
-                <h1 className="text-2xl font-light border-b border-b-slate-200 mb-3">
+                <h1 className="mb-3 border-b border-b-slate-200 text-2xl font-light">
                     Nonograms
                 </h1>
                 <div className="flex flex-col gap-2">

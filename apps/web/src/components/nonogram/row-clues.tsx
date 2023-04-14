@@ -16,7 +16,7 @@ const RowClues = ({ clues, highlightedRow }: Props) => {
                     <div
                         key={index}
                         className={clsx(
-                            "flex flex-row justify-end items-center",
+                            "flex flex-row items-center justify-end",
                             {
                                 "bg-slate-50 dark:bg-slate-900":
                                     index === highlightedRow
@@ -27,7 +27,7 @@ const RowClues = ({ clues, highlightedRow }: Props) => {
                             return (
                                 <div
                                     key={index}
-                                    className="text-center w-7 text-slate-500 dark:text-slate-400 text-sm"
+                                    className="w-7 text-center text-sm text-slate-500 dark:text-slate-400"
                                 >
                                     {clue}
                                 </div>

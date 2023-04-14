@@ -1,12 +1,10 @@
 import { useRef, useState } from "react";
 
 import type { NonogramOutput } from "~/utils/types";
-
 import Cell from "./cell";
 import ColumnClues from "./col-clues";
 import RowClues from "./row-clues";
-import type { MouseButton } from "./utils";
-import { FillState, indexToRowCol } from "./utils";
+import { FillState, indexToRowCol, type MouseButton } from "./utils";
 
 interface Props {
     definition: NonogramOutput;

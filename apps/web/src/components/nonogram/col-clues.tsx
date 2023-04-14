@@ -18,7 +18,7 @@ const ColumnClues = ({ clues, highlightedColumn }: Props) => {
                     <div
                         key={index}
                         className={clsx(
-                            "flex flex-col justify-end items-center",
+                            "flex flex-col items-center justify-end",
                             {
                                 "bg-slate-50 dark:bg-slate-900":
                                     index === highlightedColumn
@@ -29,7 +29,7 @@ const ColumnClues = ({ clues, highlightedColumn }: Props) => {
                             return (
                                 <div
                                     key={index}
-                                    className="text-center h-7 text-slate-500 text-sm dark:text-slate-400"
+                                    className="h-7 text-center text-sm text-slate-500 dark:text-slate-400"
                                 >
                                     {clue}
                                 </div>

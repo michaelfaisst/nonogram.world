@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
+import { api } from "~/utils/api";
 import Layout from "~/components/layout";
 import Nonogram from "~/components/nonogram";
-import { api } from "~/utils/api";
 
 const NonogramPage: NextPage = () => {
     const router = useRouter();

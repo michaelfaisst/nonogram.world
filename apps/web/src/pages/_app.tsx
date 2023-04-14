@@ -1,8 +1,8 @@
+import { type AppType } from "next/app";
+import { Montserrat } from "next/font/google";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import { type AppType } from "next/app";
-import { Montserrat } from "next/font/google";
 
 import "~/styles/globals.css";
 import { api } from "~/utils/api";
