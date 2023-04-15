@@ -23,10 +23,10 @@
         "drizzle-orm": "0.23.11",
         "glob": "10.0.0",
         "jsonwebtoken": "9.0.0",
+        "next": "^13.3.0",
         "nodemailer": "6.9.1",
         "sharp": "0.32.0",
         "superjson": "1.12.2",
-        "trpc-openapi": "1.1.2",
         "zod": "3.21.4"
     },
     "devDependencies": {

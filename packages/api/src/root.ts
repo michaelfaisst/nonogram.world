@@ -1,6 +1,5 @@
 import { authRouter } from "./routers/auth";
 import { nonogramRouter } from "./routers/nonograms";
-import { seedRouter } from "./routers/seed";
 import { createTRPCRouter } from "./trpc";
 
 /**
@@ -10,8 +9,7 @@ import { createTRPCRouter } from "./trpc";
  */
 export const appRouter = createTRPCRouter({
     auth: authRouter,
-    nonogram: nonogramRouter,
-    seed: seedRouter
+    nonogram: nonogramRouter
 });
 
 // export type definition of API

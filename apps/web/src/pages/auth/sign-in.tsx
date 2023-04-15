@@ -2,6 +2,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -20,6 +22,7 @@ type FormData = z.infer<typeof schema>;
 const SignIn = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | undefined>();
 
     const {
         register,
@@ -31,18 +34,20 @@ const SignIn = () => {
 
     const onSubmit = async (data: FormData) => {
         setLoading(true);
+        setError(undefined);
+
         const response = await signIn("credentials", {
             ...data,
             redirect: false,
             callbackUrl: router.query.callbackUrl as string
         });
+
         setLoading(false);
-        console.log(response);
 
         if (response?.ok) {
             router.push(response.url ?? "/");
         } else {
-            console.error(response);
+            setError(response?.error);
         }
     };
 
@@ -50,6 +55,29 @@ const SignIn = () => {
         await signIn("discord", {
             callbackUrl: router.query.callbackUrl as string
         });
+    };
+
+    const renderError = () => {
+        if (!error) {
+            return null;
+        }
+
+        const errorMessage =
+            error === "CredentialsSignin"
+                ? "Invalid user or credentials"
+                : "An error occurred";
+
+        return (
+            <motion.div
+                className="mb-4 flex flex-row items-center gap-2 rounded-lg border border-red-200 bg-red-100 px-4 py-2 text-sm text-red-900"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                <AlertCircle />
+                {errorMessage}
+            </motion.div>
+        );
     };
 
     return (
@@ -61,6 +89,8 @@ const SignIn = () => {
                 <h1 className="mb-6 text-center text-lg font-semibold">
                     Sign in
                 </h1>
+
+                <AnimatePresence>{renderError()}</AnimatePresence>
 
                 <form
                     className="flex w-80 flex-col"

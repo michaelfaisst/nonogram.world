@@ -5,7 +5,6 @@ import type {
     NextApiResponse
 } from "next";
 import { db, users } from "@nw/db";
-import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { eq } from "drizzle-orm/expressions";
@@ -94,7 +93,7 @@ const authOptions: NextAuthOptions = {
                         .where(eq(users.email, credentials.email));
 
                     if (userList[0] === undefined) {
-                        throw new Error("User not found or password wrong");
+                        throw new Error();
                     }
 
                     const user = userList[0];
@@ -105,7 +104,7 @@ const authOptions: NextAuthOptions = {
                     );
 
                     if (!passwordValid) {
-                        throw new Error("User not found or password wrong");
+                        throw new Error();
                     }
 
                     return { ...user, password: undefined };

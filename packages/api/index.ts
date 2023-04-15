@@ -5,6 +5,8 @@ import { type AppRouter } from "./src/root";
 export { appRouter, type AppRouter } from "./src/root";
 export { createTRPCContext } from "./src/trpc";
 
+export { seedDatabase, confirmAccount } from "./src/next-handlers";
+
 /**
  * Inference helpers for input types
  * @example type HelloInput = RouterInputs['example']['hello']
