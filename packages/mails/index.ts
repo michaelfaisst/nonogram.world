@@ -1,3 +1,3 @@
-import TestMail from "./emails/test-mail";
+import ConfirmAccount from "./emails/confirm-account";
 
-export { TestMail };
+export { ConfirmAccount };

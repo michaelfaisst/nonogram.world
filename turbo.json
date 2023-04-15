@@ -35,6 +35,8 @@
         "EMAIL_PORT",
         "EMAIL_USER",
         "EMAIL_PASSWORD",
+        "EMAIL_FROM",
+        "EMAIL_SECRET",
         "VERCEL",
         "VERCEL_URL"
     ]

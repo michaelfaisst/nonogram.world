@@ -25,6 +25,7 @@ import { db } from "@nw/db";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
+import type { OpenApiMeta } from "trpc-openapi";
 
 type CreateContextOptions = {
     session: Session | null;
@@ -64,12 +65,15 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     });
 };
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-    transformer: superjson,
-    errorFormatter({ shape }) {
-        return shape;
-    }
-});
+const t = initTRPC
+    .context<typeof createTRPCContext>()
+    .meta<OpenApiMeta>()
+    .create({
+        transformer: superjson,
+        errorFormatter({ shape }) {
+            return shape;
+        }
+    });
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)

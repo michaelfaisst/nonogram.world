@@ -94,9 +94,7 @@ const authOptions: NextAuthOptions = {
                         .where(eq(users.email, credentials.email));
 
                     if (userList[0] === undefined) {
-                        throw new TRPCError({
-                            code: "UNAUTHORIZED"
-                        });
+                        throw new Error("User not found or password wrong");
                     }
 
                     const user = userList[0];
@@ -106,10 +104,8 @@ const authOptions: NextAuthOptions = {
                         user.password || ""
                     );
 
-                    if (!passwordValid || !user.emailVerified) {
-                        throw new TRPCError({
-                            code: "UNAUTHORIZED"
-                        });
+                    if (!passwordValid) {
+                        throw new Error("User not found or password wrong");
                     }
 
                     return { ...user, password: undefined };

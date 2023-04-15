@@ -4,13 +4,19 @@ import { Font } from "@react-email/font";
 import { Head } from "@react-email/head";
 import { Heading } from "@react-email/heading";
 import { Html } from "@react-email/html";
+import { Preview } from "@react-email/preview";
 import { Section } from "@react-email/section";
 import { Tailwind } from "@react-email/tailwind";
 import { Text } from "@react-email/text";
 
-const ConfirmAccount = () => {
+interface Props {
+    confirmUrl: string;
+}
+
+const ConfirmAccount = ({ confirmUrl }: Props) => {
     return (
         <Tailwind>
+            <Preview>Welcome to nonogram.world!</Preview>
             <Html lang="en" dir="ltr" className="bg-slate-100">
                 <Head>
                     <title>Confirm your account</title>
@@ -40,7 +46,7 @@ const ConfirmAccount = () => {
                         <Button
                             pX={16}
                             pY={8}
-                            href="https://example.com"
+                            href={confirmUrl}
                             className="rounded-md bg-slate-900 font-medium text-white"
                         >
                             Confirm your account

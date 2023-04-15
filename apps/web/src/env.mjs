@@ -31,7 +31,9 @@ const server = z.object({
     EMAIL_HOST: z.string(),
     EMAIL_PORT: z.string(),
     EMAIL_USER: z.string(),
-    EMAIL_PASSWORD: z.string()
+    EMAIL_PASSWORD: z.string(),
+    EMAIL_FROM: z.string(),
+    EMAIL_SECRET: z.string()
 });
 
 /**
@@ -65,7 +67,9 @@ const processEnv = {
     EMAIL_HOST: process.env.EMAIL_HOST,
     EMAIL_PORT: process.env.EMAIL_PORT,
     EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+    EMAIL_SECRET: process.env.EMAIL_SECRET
 };
 
 // Don't touch the part below

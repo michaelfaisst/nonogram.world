@@ -1,11 +1,15 @@
-import { accounts, users } from "@nw/db";
+import { accounts, users, verificationTokens } from "@nw/db";
+import { ConfirmAccount } from "@nw/mails";
 import { createId } from "@paralleldrive/cuid2";
+import { render } from "@react-email/render";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import type { InferModel } from "drizzle-orm";
 import { eq, or } from "drizzle-orm/expressions";
+import { sign } from "jsonwebtoken";
 import { z } from "zod";
 
+import { mailTransporter } from "../mail";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 type NewUser = InferModel<typeof users, "insert">;
@@ -56,6 +60,28 @@ export const authRouter = createTRPCRouter({
                         type: "credentials",
                         provider: "credentials",
                         providerAccountId: newUser.id
+                    });
+
+                    const mailToken = sign(
+                        { user: newUser.id },
+                        process.env.EMAIL_SECRET as string,
+                        { expiresIn: "1d" }
+                    );
+
+                    const confirmUrl = `${process.env.NEXTAUTH_URL}/auth/confirm/email?token=${mailToken}`;
+                    const emailHtml = render(ConfirmAccount({ confirmUrl }));
+
+                    mailTransporter.sendMail({
+                        from: process.env.EMAIL_FROM,
+                        to: newUser.email,
+                        subject: "Confirm your account",
+                        html: emailHtml
+                    });
+
+                    await tx.insert(verificationTokens).values({
+                        token: mailToken,
+                        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                        identifier: newUser.id
                     });
                 });
             } catch (error) {

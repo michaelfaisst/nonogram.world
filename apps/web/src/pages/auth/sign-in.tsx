@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +19,7 @@ type FormData = z.infer<typeof schema>;
 
 const SignIn = () => {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     const {
         register,
@@ -27,11 +29,22 @@ const SignIn = () => {
         resolver: zodResolver(schema)
     });
 
-    const onSubmit = async (data: FormData) =>
-        await signIn("credentials", {
+    const onSubmit = async (data: FormData) => {
+        setLoading(true);
+        const response = await signIn("credentials", {
             ...data,
+            redirect: false,
             callbackUrl: router.query.callbackUrl as string
         });
+        setLoading(false);
+        console.log(response);
+
+        if (response?.ok) {
+            router.push(response.url ?? "/");
+        } else {
+            console.error(response);
+        }
+    };
 
     const signInWithDiscord = async () => {
         await signIn("discord", {
@@ -61,6 +74,7 @@ const SignIn = () => {
                             id="email"
                             {...register("email")}
                             className="mb-1"
+                            autoComplete="email"
                         />
                         <InputError error={errors.email?.message} />
                     </div>
@@ -74,11 +88,14 @@ const SignIn = () => {
                             className="mb-1"
                             {...register("password")}
                             type="password"
+                            autoComplete="current-password"
                         />
                         <InputError error={errors.password?.message} />
                     </div>
 
-                    <Button type="submit">Sign in</Button>
+                    <Button type="submit" loading={loading}>
+                        Sign in
+                    </Button>
                     <div className="my-3 flex flex-row items-center justify-between text-sm text-slate-400">
                         <Link href="/auth/sign-up">Create account</Link>
 
