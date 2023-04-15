@@ -13,6 +13,7 @@
     "dependencies": {
         "@nw/auth": "workspace:*",
         "@nw/db": "workspace:*",
+        "@nw/mails": "workspace:*",
         "@paralleldrive/cuid2": "2.2.0",
         "@trpc/client": "^10.20.0",
         "@trpc/server": "^10.20.0",
