@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -24,6 +25,7 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 const SignUp = () => {
+    const router = useRouter();
     const signUpMutation = api.auth.signUp.useMutation();
 
     const {
@@ -35,11 +37,18 @@ const SignUp = () => {
     });
 
     const onSubmit = async (data: FormData) => {
-        await signUpMutation.mutateAsync({
-            email: data.email,
-            userName: data.userName,
-            password: data.password
-        });
+        await signUpMutation.mutateAsync(
+            {
+                email: data.email,
+                userName: data.userName,
+                password: data.password
+            },
+            {
+                onSuccess: () => {
+                    router.push("/auth/account-created");
+                }
+            }
+        );
     };
 
     return (

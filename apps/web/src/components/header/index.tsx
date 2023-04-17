@@ -96,11 +96,13 @@ const Header = () => {
     };
 
     return (
-        <div className="flex h-20 flex-row items-center justify-between py-4">
-            <h1 className="font-light text-slate-900 dark:text-white">
-                nonogram.world
-            </h1>
-            <div className="flex flex-row gap-2">{renderUserSection()}</div>
+        <div className="flex justify-center border-b border-b-slate-100 dark:border-b-slate-800">
+            <div className="mx-auto flex h-16 w-full max-w-6xl flex-row items-center justify-between py-4">
+                <h1 className="font-light text-slate-900 dark:text-white">
+                    nonogram.world
+                </h1>
+                <div className="flex flex-row gap-2">{renderUserSection()}</div>
+            </div>
         </div>
     );
 };
