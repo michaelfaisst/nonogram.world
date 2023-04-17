@@ -13,6 +13,7 @@
     "dependencies": {
         "@nw/auth": "workspace:*",
         "@nw/db": "workspace:*",
+        "@nw/env": "workspace:*",
         "@nw/mails": "workspace:*",
         "@paralleldrive/cuid2": "2.2.0",
         "@react-email/render": "0.0.7",

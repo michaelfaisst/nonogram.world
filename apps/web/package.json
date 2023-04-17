@@ -17,6 +17,7 @@
         "@nw/api": "workspace:*",
         "@nw/auth": "workspace:^1.0.0",
         "@nw/db": "workspace:^1.0.0",
+        "@nw/env": "workspace:*",
         "@nw/tailwind-config": "workspace:^1.0.0",
         "@radix-ui/react-avatar": "1.0.2",
         "@radix-ui/react-dropdown-menu": "2.0.4",

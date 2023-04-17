@@ -43,6 +43,9 @@ importers:
       '@nw/db':
         specifier: workspace:^1.0.0
         version: link:../../packages/db
+      '@nw/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@nw/tailwind-config':
         specifier: workspace:^1.0.0
         version: link:../../packages/config/tailwind
@@ -185,6 +188,9 @@ importers:
       '@nw/db':
         specifier: workspace:*
         version: link:../db
+      '@nw/env':
+        specifier: workspace:*
+        version: link:../env
       '@nw/mails':
         specifier: workspace:*
         version: link:../mails
@@ -252,6 +258,9 @@ importers:
       '@nw/db':
         specifier: workspace:*
         version: link:../db
+      '@nw/env':
+        specifier: workspace:*
+        version: link:../env
       '@paralleldrive/cuid2':
         specifier: 2.2.0
         version: 2.2.0
@@ -341,6 +350,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@nw/env':
+        specifier: workspace:*
+        version: link:../env
       '@planetscale/database':
         specifier: 1.7.0
         version: 1.7.0
@@ -366,6 +378,25 @@ importers:
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
+
+  packages/env:
+    dependencies:
+      zod:
+        specifier: 3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@nw/eslint-config':
+        specifier: workspace:^1.0.0
+        version: link:../config/eslint
+      '@types/node':
+        specifier: ^18.15.11
+        version: 18.15.11
+      dotenv-cli:
+        specifier: 7.2.1
+        version: 7.2.1
+      eslint:
+        specifier: ^8.38.0
+        version: 8.38.0
 
   packages/mails:
     dependencies:

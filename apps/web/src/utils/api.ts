@@ -5,13 +5,14 @@
  * We also create a few inference helpers for input and output types.
  */
 import type { AppRouter } from "@nw/api";
+import env from "@nw/env";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
 
 const getBaseUrl = () => {
     if (typeof window !== "undefined") return ""; // browser should use relative url
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+    if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`; // SSR should use vercel url
     return `http://localhost:3000`; // dev SSR should use localhost
 };
 
@@ -34,7 +35,7 @@ export const api = createTRPCNext<AppRouter>({
             links: [
                 loggerLink({
                     enabled: (opts) =>
-                        process.env.NODE_ENV === "development" ||
+                        env.NODE_ENV === "development" ||
                         (opts.direction === "down" &&
                             opts.result instanceof Error)
                 }),

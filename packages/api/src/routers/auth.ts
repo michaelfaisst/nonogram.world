@@ -1,4 +1,5 @@
 import { accounts, users } from "@nw/db";
+import env from "@nw/env";
 import { ConfirmAccount } from "@nw/mails";
 import { createId } from "@paralleldrive/cuid2";
 import { render } from "@react-email/render";
@@ -64,15 +65,15 @@ export const authRouter = createTRPCRouter({
 
                     const mailToken = sign(
                         { userId: newUser.id },
-                        process.env.EMAIL_SECRET as string,
+                        env.EMAIL_SECRET,
                         { expiresIn: "1d" }
                     );
 
-                    const confirmUrl = `${process.env.NEXTAUTH_URL}/api/auth/confirm-account?token=${mailToken}`;
+                    const confirmUrl = `${env.NEXTAUTH_URL}/api/auth/confirm-account?token=${mailToken}`;
                     const emailHtml = render(ConfirmAccount({ confirmUrl }));
 
                     mailTransporter.sendMail({
-                        from: process.env.EMAIL_FROM,
+                        from: env.EMAIL_FROM,
                         to: newUser.email,
                         subject: "Confirm your account",
                         html: emailHtml

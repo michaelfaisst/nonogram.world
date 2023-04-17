@@ -6,6 +6,8 @@ import { z } from "zod";
  */
 const server = z.object({
     NODE_ENV: z.enum(["development", "test", "production"]),
+    VERCEL: z.string().optional(),
+    VERCEL_URL: z.string().optional(),
 
     DB_URL: z.string(),
     DB_HOST: z.string(),
@@ -52,6 +54,8 @@ const client = z.object({
  */
 const processEnv = {
     NODE_ENV: process.env.NODE_ENV,
+    VERCEL: process.env.VERCEL,
+    VERCEL_URL: process.env.VERCEL_URL,
 
     DB_URL: process.env.DB_URL,
     DB_HOST: process.env.DB_HOST,

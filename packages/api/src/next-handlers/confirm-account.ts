@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db, users } from "@nw/db";
+import env from "@nw/env";
 import { eq } from "drizzle-orm/expressions";
 import { verify } from "jsonwebtoken";
 
@@ -14,7 +15,9 @@ export const confirmAccount = async (
     }
 
     try {
-        const { userId } = verify(token, process.env.EMAIL_SECRET);
+        const { userId } = verify(token, env.EMAIL_SECRET) as {
+            userId: string;
+        };
 
         const userList = await db
             .select()

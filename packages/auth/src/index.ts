@@ -5,6 +5,7 @@ import type {
     NextApiResponse
 } from "next";
 import { db, users } from "@nw/db";
+import env from "@nw/env";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { eq } from "drizzle-orm/expressions";
@@ -66,8 +67,8 @@ const authOptions: NextAuthOptions = {
     providers: [
         DiscordProvider({
             id: "discord",
-            clientId: process.env.DISCORD_CLIENT_ID as string,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET as string
+            clientId: env.DISCORD_CLIENT_ID,
+            clientSecret: env.DISCORD_CLIENT_SECRET
         }),
         CredentialsProvider({
             id: "credentials",
