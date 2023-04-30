@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -82,11 +83,18 @@ const SignIn = () => {
 
     return (
         <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-slate-100 dark:bg-slate-950">
-            <h2 className="mb-4 text-sm font-light text-slate-900 dark:text-white">
-                nonogram.world
-            </h2>
+            <div className="mb-6 flex flex-col items-center">
+                <Image
+                    alt="nonogram.world logo"
+                    src="/logo.png"
+                    className="mb-2 h-10 w-10"
+                    width={40}
+                    height={40}
+                />
+                <h2 className="text-sm tracking-tighter">nonogram.world</h2>
+            </div>
             <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-800 dark:bg-slate-900">
-                <h1 className="mb-6 text-center text-lg font-semibold">
+                <h1 className="mb-6 text-center text-lg font-semibold tracking-tight">
                     Sign in
                 </h1>
 
